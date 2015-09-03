@@ -6,9 +6,14 @@
 
 #  Installs php and httpd packages
 package 'php'
+package 'php-mysql'
 package 'httpd'
 
 service 'php' do
+  action :nothing
+end
+
+service 'php-mysql' do
   action :nothing
 end
 
