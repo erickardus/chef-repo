@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
+package "perl"
 package "httpd"
 
 service "httpd" do
@@ -27,12 +28,10 @@ template "#{document_root}/index.html" do
  mode '0644'
 end
 
-group "#{node['apache3']['group']}" do
-  members "#{node['apache3']['user']}"
-end
+group "#{node['apache3']['group']}"
 
 user "#{node['apache3']['user']}" do
-	password "#{node['apache3']['password']}"
+	group "#{node['apache3']['group']}"
 	shell "#{node['apache3']['shell']}"
 end
 
@@ -40,4 +39,15 @@ template '/etc/httpd/conf/httpd.conf' do
  source 'httpd.erb'
  mode '0644'
  notifies :restart, 'service[httpd]'
+end
+
+execute 'renew_sysctl' do
+	command 'sysctl -p'
+	action :nothing
+end
+
+template '/etc/sysctl.conf' do
+ source 'sysctl.conf.erb'
+ mode '0644'
+ notifies :run, 'execute[renew_sysctl]', :immediately
 end

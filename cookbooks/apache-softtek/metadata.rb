@@ -1,4 +1,4 @@
-name 'apache3'
+name 'apache-softtek'
 maintainer 'Ulises Escareño, Diego De Fuentes'
 maintainer_email 'ulises.escareno@softtek.com'
 maintainer_email 'diego.fuentes@softtek.com'

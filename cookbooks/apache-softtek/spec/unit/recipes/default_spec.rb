@@ -17,6 +17,10 @@ describe 'apache3::default' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
+
+	it 'installs perl' do
+	  expect(chef_run).to install_package('perl')
+	end
 	
 	it 'installs httpd' do
 	  expect(chef_run).to install_package('httpd') 
@@ -50,6 +54,16 @@ describe 'apache3::default' do
 	it 'Modifies httpd.conf' do
 	  expect(chef_run).to create_template('/etc/httpd/conf/httpd.conf') 
 	end	
+	
+	it 'Modifies sysctl.conf' do
+	  expect(chef_run).to create_template('/etc/sysctl.conf') 
+	end	
+	
+#    it 'restarts sysctl' do
+#      template = chef_run.template('/etc/sysctl.conf')
+#      expect(template).to execute('renew_sysctl')
+#    end
+
 	
   end
 end
