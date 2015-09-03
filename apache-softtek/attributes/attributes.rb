@@ -1,0 +1,12 @@
+default['apache3']['port'] =  7070
+default['apache3']['document_root'] = '/var/www/html'
+default['apache3']['group'] =  'web_admin'
+default['apache3']['user'] =  'web_admin'
+default['apache3']['password'] =  'patito'
+default['apache3']['shell'] =  '/bin/false'
+default['apache3']['StartServers'] = 8
+default['apache3']['MinSpareServers'] = 5
+default['apache3']['MaxSpareServers'] = 20
+default['apache3']['ServerLimit'] = 256
+default['apache3']['MaxClients'] = 256
+default['apache3']['MaxRequestsPerChild'] = 4000
