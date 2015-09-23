@@ -136,6 +136,6 @@ template 'config_file' do
    group 'root'
    mode '0755'
    action :create
-   notifies :restart, 'service[haproxy]', :delayed
+#   notifies :restart, 'service[haproxy]', :delayed
 end
 
