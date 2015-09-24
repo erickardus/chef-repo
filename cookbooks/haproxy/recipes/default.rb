@@ -76,7 +76,7 @@ end
 
 
 #--------------------
-# resource:  template 'haproxy_init_script'
+# resource:  template 'init_script'
 #   Creates the init file /etc/init.d/haproxy  to start/stop haproxy service when server is rebooted
 #--------------------
 
@@ -95,13 +95,12 @@ template 'init_script' do
 end
 
 
-service "haproxy" do
-  supports :start => true, :stop => true, :restart => true, :status => true, :reload => true
-  action :enable 
-end
+#--------------------
+# resource:  cookbook_file '/etc/default/haproxy' 
+#   Installs the default file to enable/disable haproxy in ubuntu OS
+#--------------------
 
-cookbook_file 'etc_default_file' do
-   path '/etc/default/haproxy'
+cookbook_file '/etc/default/haproxy' do
    source 'haproxy'
    owner 'root'
    group 'root'
@@ -111,12 +110,11 @@ end
 
 
 #--------------------
-# resource:  directory  "Configuration directory"
+# resource:  directory  <Configuration directory path>
 #   Creates the directory where configuration file will live
 #--------------------
 
-directory 'config_dir' do
-   path #{node['haproxy']['conf_dir']}
+directory "#{node['haproxy']['conf_dir']}" do
    action :create
    owner 'root'
    user 'root'
@@ -125,17 +123,26 @@ end
 
 
 #--------------------
-# resource:  template "Configuration file"
+# resource:  template "<Configuration file path>"
 #   Creates the configuration file based on the given parameters in attributes
 #--------------------
 
-template 'config_file' do
-   path #{node['haproxy']['conf_dir']}/#{node['haproxy']['conf_file']}
+template "#{node['haproxy']['conf_dir']}/#{node['haproxy']['conf_file']}" do
    source 'haproxy.cfg.erb'
    owner 'root'
    group 'root'
    mode '0755'
    action :create
-#   notifies :restart, 'service[haproxy]', :delayed
 end
 
+
+#--------------------
+# resource:  service 'haproxy'
+#   Enables the haproxy service on the system
+#--------------------
+
+service 'haproxy' do
+  supports :start => true, :stop => true, :restart => true, :status => true, :reload => true
+  action [ :enable, :start ]
+  subscribes :restart, 'template[config_file]', :delayed
+end
