@@ -6,7 +6,7 @@
 
 # Define nginx version and url for download
 
-default['nginx']['version'] = '1.8.0'
+default['nginx']['version'] = '1.9.0'
 default['nginx']['url']     = 'http://www.nginx.org/download/'
 default['nginx']['user']    = 'root'
 default['nginx']['dir']     = '/etc/nginx/'

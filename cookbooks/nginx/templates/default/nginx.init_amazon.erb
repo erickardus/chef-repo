@@ -17,8 +17,11 @@
 # Check that networking is up.
 [ "$NETWORKING" = "no" ] && exit
 # exec=<%= node['nginx']['binary'] %>
-exec= '/usr/local/nginx/sbin/nginx'
+exec="/usr/local/nginx/sbin/nginx"
 prog=$(basename $exec)
+
+/usr/local/nginx/sbin/nginx -v &> /tmp/a.a
+nginx_version=`cut -d / -f 2 /tmp/a.a`
 
 # default options, overruled by items in sysconfig
 NGINX_GLOBAL=""
@@ -32,9 +35,11 @@ start() {
     echo -n $"Starting $prog: "
     # if not running, start it up here, usually something like "daemon $exec"
     options=""
-    if [ "${NGINX_GLOBAL}" != ""  ]; then
-        options="-g ${NGINX_GLOBAL}"
+    if [ "${NGINX_GLOBAL}" = ""  ]; then
+#        options="-c /usr/local/nginx/conf/nginx.conf"
+         options="-c /etc/nginx/nginx-"$nginx_version"/conf/nginx.conf"
     fi
+    rm /tmp/a.a
     $exec $options
     retval=$?
     echo
