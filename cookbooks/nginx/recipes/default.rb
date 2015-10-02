@@ -19,17 +19,49 @@ proxy   = node['nginx']['data_proxy']
 
 # Needed libraries to compile nginx for CentOS and Amazon
 
-package ['zlib-devel', 'pcre-devel', 'gcc'] do
+package 'zlib-devel' do
+  action :install
+  only_if { platform? ('centos') or ('amazon')}
+end
+
+package 'pcre-devel' do
+  action :install
+  only_if { platform? ('centos') or ('amazon')}
+end
+
+package 'gcc' do
   action :install
   only_if { platform? ('centos') or ('amazon')}
 end
 
 # Needed libraries to compile nginx for Ubuntu
 
-package ['libpcre3-dev', 'build-essential', 'libssl-dev'] do
+package 'libpcre3-dev' do
   action :install
   only_if { platform? ('ubuntu') }
 end
+
+package 'build-essential' do
+  action :install
+  only_if { platform? ('ubuntu') }
+end
+
+package 'libssl-dev' do
+  action :install
+    only_if { platform? ('ubuntu') }
+end
+
+#package ['zlib-devel', 'pcre-devel', 'gcc'] do
+#  action :install
+#  only_if { platform? ('centos') or ('amazon')}
+#end
+
+# Needed libraries to compile nginx for Ubuntu
+
+#package ['libpcre3-dev', 'build-essential', 'libssl-dev'] do
+#  action :install
+#  only_if { platform? ('ubuntu') }
+#end
 
 # create directory for downloading nginx
 
